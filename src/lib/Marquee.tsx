@@ -1,7 +1,10 @@
 import React from 'react';
 
-function Marquee() {
-	return <div>Marquee</div>;
+interface Props {
+	children: React.ReactNode;
+}
+function Marquee({ children }: Props) {
+	return <div>{children}</div>;
 }
 
 export default Marquee;
