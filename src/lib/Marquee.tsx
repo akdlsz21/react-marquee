@@ -1,10 +1,11 @@
-import React from "react";
+import React from 'react';
 
-interface Props {
-  children: React.ReactNode;
+interface Props extends React.HTMLProps<HTMLDivElement> {
+	children: React.ReactNode;
 }
-function Marquee({ children }: Props) {
-  return <div style={{ outline: "2px solid red" }}>{children}</div>;
+
+function Marquee({ children, ...rest }: Props) {
+	return <div {...rest}>{children}</div>;
 }
 
 export default Marquee;
