@@ -1,12 +1,12 @@
 @keyframes flowLeft {
 	from {
-		transform: translateX(0);
+		transform: translateX(100%);
 	}
 	to {
-		transform: translateX(-200%);
+		transform: translateX(-100%);
 	}
 }
 
 .marquee-left {
-	animation: flowLeft 5s linear infinite;
+	animation: flowLeft 5s linear;
 }
