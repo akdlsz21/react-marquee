@@ -3,18 +3,17 @@
 		transform: translateX(0%);
 	}
 	to {
-		transform: translateX(-100%);
+		transform: translateX(-104%);
 	}
 }
 
 .marquee-left {
-	animation: flowLeft 5s linear infinite;
-    outline: 1px solid blue;
-    background-color: pink;
+	animation: flowLeft 3s linear infinite;
     display: flex;
     flex: 0 0 auto;
     min-width: auto;
     flex-direction: row;
     align-items: center;
     width: max-content;
+    padding-right: 40px;
 }

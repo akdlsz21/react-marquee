@@ -10,19 +10,21 @@ function ExperimentalMarquee({ children, ...rest }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
 
+  const [isMounted, setIsMounted] = useState(false);
   const [multiplier, setMultiplier] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [marqueeWidth, setMarqueeWidth] = useState(0);
 
-  console.log(containerWidth, marqueeWidth);
+  //   console.log(containerWidth, marqueeWidth);
 
-  const calculateWidth = useCallback(() => {
+  const calculateWidth = () => {
+    console.log(marqueeRef.current, containerRef.current, "asdfasd");
     if (marqueeRef.current && containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect();
       const marqueeRect = marqueeRef.current.getBoundingClientRect();
       const containerWidth = containerRect.width;
       const marqueeWidth = marqueeRect.width;
-
+      console.log(containerWidth, marqueeWidth);
       if (containerWidth && marqueeWidth) {
         setMultiplier(
           marqueeWidth < containerWidth
@@ -33,19 +35,22 @@ function ExperimentalMarquee({ children, ...rest }: Props) {
         setMultiplier(1);
       }
       console.log(marqueeWidth);
+      console.log(containerWidth);
       setContainerWidth(containerWidth);
       setMarqueeWidth(marqueeWidth);
     }
-  }, [containerRef]);
+  };
 
   useEffect(() => {
+    console.log("first");
+    // if (!isMounted) return;
     calculateWidth();
-  }, [calculateWidth, children]);
+  }, [isMounted]);
 
   const multiplyChildren = useCallback(
     (multiplier: number) => {
       return [...Array(multiplier >= 0 ? multiplier : 0)].map((_, i) => (
-        <div key={i} className="marquee-left" ref={marqueeRef} style={{}}>
+        <div key={i} className="marquee-left" style={{}}>
           {children}
         </div>
       ));
@@ -53,9 +58,18 @@ function ExperimentalMarquee({ children, ...rest }: Props) {
     [children]
   );
 
+  //   useEffect(() => {
+  //     setIsMounted(true);
+  //   }, []);
+  console.log(multiplier);
+  //   if (!isMounted) return null;
   return (
     <div ref={containerRef} {...rest}>
-      {multiplyChildren(multiplier)}
+      <div className="marquee-left" ref={marqueeRef} style={{}}>
+        {children}
+      </div>
+
+      {multiplyChildren(multiplier - 1)}
     </div>
   );
 }
