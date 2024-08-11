@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import "./styles/index.css";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
@@ -10,12 +10,11 @@ function ExperimentalMarquee({ children, ...rest }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
 
-  const [isMounted, setIsMounted] = useState(false);
   const [multiplier, setMultiplier] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [marqueeWidth, setMarqueeWidth] = useState(0);
 
-  //   console.log(containerWidth, marqueeWidth);
+  console.log(containerWidth, marqueeWidth);
 
   const calculateWidth = () => {
     console.log(marqueeRef.current, containerRef.current, "asdfasd");
@@ -28,8 +27,8 @@ function ExperimentalMarquee({ children, ...rest }: Props) {
       if (containerWidth && marqueeWidth) {
         setMultiplier(
           marqueeWidth < containerWidth
-            ? Math.ceil(containerWidth / marqueeWidth)
-            : 1
+            ? Math.ceil(containerWidth / marqueeWidth) + 1
+            : 2
         );
       } else {
         setMultiplier(1);
@@ -41,11 +40,9 @@ function ExperimentalMarquee({ children, ...rest }: Props) {
     }
   };
 
-  useEffect(() => {
-    console.log("first");
-    // if (!isMounted) return;
+  useLayoutEffect(() => {
     calculateWidth();
-  }, [isMounted]);
+  }, []);
 
   const multiplyChildren = useCallback(
     (multiplier: number) => {
@@ -58,11 +55,6 @@ function ExperimentalMarquee({ children, ...rest }: Props) {
     [children]
   );
 
-  //   useEffect(() => {
-  //     setIsMounted(true);
-  //   }, []);
-  console.log(multiplier);
-  //   if (!isMounted) return null;
   return (
     <div ref={containerRef} {...rest}>
       <div className="marquee-left" ref={marqueeRef} style={{}}>

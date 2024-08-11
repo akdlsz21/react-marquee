@@ -3,12 +3,12 @@
 		transform: translateX(0%);
 	}
 	to {
-		transform: translateX(-104%);
+		transform: translateX(-100%);
 	}
 }
 
 .marquee-left {
-	animation: flowLeft 3s linear infinite;
+	animation: flowLeft 2s linear infinite;
     display: flex;
     flex: 0 0 auto;
     min-width: auto;
