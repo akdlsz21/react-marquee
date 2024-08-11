@@ -9,16 +9,16 @@ interface Props extends React.HTMLProps<HTMLDivElement> {
 function Marquee({ children, cb, ...rest }: Props) {
   return (
     <div {...rest}>
-      <div
-        className="marquee-left"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-        onAnimationEnd={cb}
-      >
-        {children}
+      <div className="marquee-left" onAnimationEnd={cb} style={{}}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 @keyframes flowLeft {
 	from {
-		transform: translateX(100%);
+		transform: translateX(0%);
 	}
 	to {
 		transform: translateX(-100%);
@@ -8,5 +8,13 @@
 }
 
 .marquee-left {
-	animation: flowLeft 5s linear;
+	animation: flowLeft 5s linear infinite;
+    outline: 1px solid blue;
+    background-color: pink;
+    display: flex;
+    flex: 0 0 auto;
+    min-width: auto;
+    flex-direction: row;
+    align-items: center;
+    width: max-content;
 }
