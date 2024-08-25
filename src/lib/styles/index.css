@@ -8,12 +8,19 @@
 }
 
 .marquee-left {
-	animation: flowLeft 2s linear infinite;
+	animation: flowLeft 8s linear infinite;
     display: flex;
     flex: 0 0 auto;
     min-width: auto;
     flex-direction: row;
     align-items: center;
     width: max-content;
-    padding-right: 40px;
+}
+
+.marquee-children {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: max-content;
+    margin-right: 40px;
 }

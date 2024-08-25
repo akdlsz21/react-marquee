@@ -1,54 +1,91 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
-import "./styles/index.css";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import "./marquee.css";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
-	children: React.ReactNode;
-	cb: () => void;
+  speed?: number;
+  cb: () => void;
+  children: React.ReactNode;
 }
 
-function ExperimentalMarquee({ children, ...rest }: Props) {
-	const containerRef = useRef<HTMLDivElement>(null);
-	const marqueeRef = useRef<HTMLDivElement>(null);
+function Marquee({ speed = 50, children, ...rest }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const childrenRef = useRef<HTMLDivElement>(null);
 
-	const [multiplier, setMultiplier] = useState(0);
+  const [childrenWidth, setChildrenWidth] = useState(0);
+  const [multiplier, setMultiplier] = useState(0);
 
-	const calculateWidth = () => {
-		if (!(marqueeRef.current && containerRef.current)) return;
-		const containerWidth = containerRef.current.getBoundingClientRect().width;
-		const childrenWidth = marqueeRef.current.getBoundingClientRect().width;
-		if (!containerWidth || !childrenWidth) {
-			setMultiplier(1);
-			return;
-		}
+  const calculateWidth = useCallback(() => {
+    if (!(childrenRef.current && containerRef.current)) return;
+    const containerWidth = containerRef.current.getBoundingClientRect().width;
+    const childrenWidth = childrenRef.current.getBoundingClientRect().width;
+    if (!containerWidth || !childrenWidth) {
+      setMultiplier(1);
+      return;
+    }
 
-		const repititions = Math.ceil(containerWidth / childrenWidth);
-		setMultiplier(repititions + 1);
-	};
+    const repititions = Math.ceil(containerWidth / childrenWidth);
+    setMultiplier(repititions);
+    setChildrenWidth(childrenWidth);
+  }, []);
 
-	useLayoutEffect(() => {
-		calculateWidth();
-	}, []);
+  useLayoutEffect(() => {
+    calculateWidth();
+  }, [calculateWidth]);
 
-	const multiplyChildren = useCallback(
-		(multiplier: number) => {
-			return [...Array(multiplier >= 0 ? multiplier : 0)].map((_, i) => (
-				<div key={i} className="marquee-left" style={{}}>
-					{children}
-				</div>
-			));
-		},
-		[children],
-	);
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => calculateWidth());
+    if (!containerRef.current) return;
+    resizeObserver.observe(containerRef.current);
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [calculateWidth]);
 
-	return (
-		<div ref={containerRef} {...rest}>
-			<div className="marquee-left" ref={marqueeRef} style={{}}>
-				{children}
-			</div>
+  useEffect(() => {
+    calculateWidth();
+  }, [calculateWidth, children]);
 
-			{multiplyChildren(multiplier - 1)}
-		</div>
-	);
+  const duration = useMemo(() => {
+    return (childrenWidth * multiplier) / speed;
+  }, [childrenWidth, multiplier, speed]);
+
+  const multiplyChildren = useCallback(
+    (multiplier: number) => {
+      return [...Array(multiplier >= 0 ? multiplier : 0)].map((_, i) => (
+        <div key={i} className="marquee-children">
+          {children}
+        </div>
+      ));
+    },
+    [children]
+  );
+
+  return (
+    <div ref={containerRef} {...rest}>
+      <div
+        className="marquee-left"
+        style={{ animationDuration: `${duration}s` }}
+      >
+        <div className="marquee-children" ref={childrenRef}>
+          {children}
+        </div>
+        {multiplyChildren(multiplier - 1)}
+      </div>
+      <div
+        className="marquee-left"
+        style={{ animationDuration: `${duration}s` }}
+      >
+        {multiplyChildren(multiplier)}
+      </div>
+    </div>
+  );
 }
 
-export default ExperimentalMarquee;
+export default Marquee;
