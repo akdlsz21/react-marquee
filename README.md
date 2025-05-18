@@ -1,5 +1,8 @@
 # react-marquee
 
+<h2>Marquee animation wrapper component for React.</h2>
+
+
 <!-- create a table for config -->
 
 | Prop        | Type        | Default | Description                  |
